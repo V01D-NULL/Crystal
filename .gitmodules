@@ -1,0 +1,6 @@
+[submodule "resources/limine"]
+	path = resources/limine
+	url = https://github.com/limine-bootloader/limine.git
+[submodule "resources/echfs"]
+	path = resources/echfs
+	url = https://github.com/echfs/echfs.git

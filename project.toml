@@ -1,0 +1,16 @@
+[[executable]]
+
+name = "Crystal"
+version = "0.1.0"
+authors = ["V01D"]
+langrev = "1"
+warnings = ["no-unused"]
+sources = ["src/**"]
+libs = ["lib/**"]
+target = "x64-elf"
+
+# No SSE memes
+no-avx = true
+no-mmx = true
+no-sse = true
+soft-float = true
