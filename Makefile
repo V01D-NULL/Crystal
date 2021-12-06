@@ -16,8 +16,8 @@ all:
 	@rm -rf ./build/*
 
 #	Third party deps
-	@$(MAKE) --no-print-directory resources/limine
-	@$(MAKE) --no-print-directory resources/echfs
+	@$(MAKE) -C resources/limine --no-print-directory
+	@$(MAKE) -C resources/echfs --no-print-directory
 	
 #	Build kernel
 	$(AS) $(ASFLAGS) src/Crystal/asm/io.S -o io.o
