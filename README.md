@@ -10,7 +10,7 @@ Well I wanted to try something new, explore new compilers, report it's bugs due 
 
 ## Build instructions:
 - Clone this repository and it's submodules: `git clone https://github.com/V01D-NULL/Crystal.git --recursive`
-- Install / compile the dependencies: `make deps`
+- Install / compile the dependencies: `make deps` (If you are unable to build limine, you can manually switch to the `latest-binary` branch for precompiled binaries)
 - Run the kernel (kvm strongly encouraged): `make && make kvm`
 
 ## Makefile targets:
