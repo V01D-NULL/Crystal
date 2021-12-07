@@ -15,10 +15,6 @@ all:
 #	Cleanup
 	@rm -rf ./build/*
 
-#	Third party deps
-	@$(MAKE) -C resources/limine --no-print-directory
-	@$(MAKE) -C resources/echfs --no-print-directory
-	
 #	Build kernel
 	$(AS) $(ASFLAGS) src/Crystal/asm/io.S -o io.o
 	$(C3) $(C3FLAGS)
@@ -42,11 +38,24 @@ all:
 #	Cleanup
 	@mv *.o build/
 
+# Third party deps
+deps:
+	@$(MAKE) -C resources/limine --no-print-directory
+	@$(MAKE) -C resources/echfs --no-print-directory
+	
+# Alias for deps
+dependencies:
+	@$(MAKE) -C resources/limine --no-print-directory
+	@$(MAKE) -C resources/echfs --no-print-directory
+
 run:
-	qemu-system-x86_64 -cdrom $(ISO_IMAGE) -m 256M -d int -M smm=off -S -s
+	qemu-system-x86_64 -cdrom $(ISO_IMAGE) -m 256M -d int -M smm=off
 
 kvm:
 	qemu-system-x86_64 -cdrom $(ISO_IMAGE) -m 256M -enable-kvm -cpu host -debugcon stdio
+
+debug:
+	qemu-system-x86_64 -cdrom $(ISO_IMAGE) -m 256M -d int -M smm=off -S -s
 
 clean:
 	@rm -rf build/*
