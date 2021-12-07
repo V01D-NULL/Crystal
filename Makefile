@@ -26,7 +26,7 @@ all:
 #	Build ISO
 	@rm -rf iso_root
 	@mkdir -p iso_root
-	@cp $(ELF_IMAGE) resources/limine.cfg resources/limine/build/bin/* iso_root/
+	@cp $(ELF_IMAGE) resources/limine.cfg resources/bg.bmp resources/limine/build/bin/* iso_root/
 	@xorriso -as mkisofs -b limine-cd.bin \
 		-no-emul-boot -boot-load-size 4 -boot-info-table \
 		--efi-boot limine-eltorito-efi.bin \

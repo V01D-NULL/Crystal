@@ -4,6 +4,28 @@ module stivale2;
 // Used to communicate with the bootloader
 //
 
+fn void* get_tag(Stivale2_struct *stivale2_struct, ulong id) {
+    Stivale2_tag *current_tag = (void *)(stivale2_struct.tags);
+    for (;;) {
+        // If the tag pointer is NULL (end of linked list), we did not find
+        // the tag. Return NULL to signal this.
+        if (current_tag == null) {
+            return null;
+        }
+
+        // Check whether the identifier matches. If it does, return a pointer
+        // to the matching tag.
+        if (current_tag.identifier == id) {
+            return current_tag;
+        }
+
+        // Get a pointer to the next tag in the linked list and repeat.
+        current_tag = (void *)(current_tag.next);
+    }
+
+    return null;
+}
+
 // Request 8KiB of stack
 char[8192] stack @align(16);
 
@@ -11,7 +33,25 @@ Stivale2_header stivale2_hdr @section(".stivale2hdr") = {
     .entry_point = 0,
     .stack = (uptr)(&stack[0] + $sizeof(stack)),
     .flags = 0b11110,
-    .tags = (uptr)(0)
+    .tags = (ulong)(&framebuffer_hdr)
+};
+
+Stivale2_struct_tag_framebuffer framebuffer_hdr = {
+    .tag = {
+        .identifier = STIVALE2_HEADER_TAG_FRAMEBUFFER_ID,
+        .next = (uptr)(&terminal_hdr)
+    },
+    .framebuffer_width = 0,  // No preference
+    .framebuffer_height = 0, // No preference
+    .framebuffer_bpp = 32
+};
+
+Stivale2_header_tag_terminal terminal_hdr = {
+    .tag = {
+        .identifier = STIVALE2_HEADER_TAG_TERMINAL_ID,
+        .next = 0
+    },
+    .flags = 0
 };
 
 //
