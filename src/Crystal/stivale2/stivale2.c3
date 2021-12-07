@@ -1,5 +1,23 @@
 module stivale2;
 
+//
+// Used to communicate with the bootloader
+//
+
+// Request 8KiB of stack
+char[8192] stack @align(16);
+
+Stivale2_header stivale2_hdr @section(".stivale2hdr") = {
+    .entry_point = 0,
+    .stack = (uptr)(&stack[0] + $sizeof(stack)),
+    .flags = 0b11110,
+    .tags = (uptr)(0)
+};
+
+//
+// Bootloader specific structures
+//
+
 // Anchor for non ELF kernels
 struct Stivale2_anchor @packed {
     char[15] anchor;
