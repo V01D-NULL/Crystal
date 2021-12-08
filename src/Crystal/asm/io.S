@@ -1,3 +1,6 @@
+bits 64
+section .text
+
 global outb
 outb:
 	mov dx, di  ; port
