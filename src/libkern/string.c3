@@ -32,9 +32,9 @@ fn char* strrev(char *src)
     return src;
 }
 
-fn int digit_count(int num, int base=10)
+fn isize digit_count(isize num, int base=10)
 {
-    int count = 0;
+    isize count = 0;
     while (num != 0)
     {
         num /= base;
@@ -43,7 +43,7 @@ fn int digit_count(int num, int base=10)
     return count;
 }
 
-fn bool is_digit(char digit)
+fn bool is_digit(char digit) @inline
 {
     return (digit >= '0' && digit <= '9');
 }
@@ -51,7 +51,7 @@ fn bool is_digit(char digit)
 const char[16] CONVERSION_TABLE_LOWER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 const char[16] CONVERSION_TABLE_UPPER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-fn char itoc(isize digit, bool upper=false)
+fn char itoc(isize digit, bool upper=false) @inline
 {
     return upper ? CONVERSION_TABLE_UPPER[digit] : CONVERSION_TABLE_LOWER[digit];
 }
