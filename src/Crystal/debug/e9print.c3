@@ -10,3 +10,8 @@ fn void log(char* msg)
         assembly::outb(0xe9, msg[i]);
     }
 }
+
+fn void logc(char c)
+{
+    assembly::outb(0xe9, c);
+}
