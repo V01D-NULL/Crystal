@@ -16,7 +16,8 @@ all:
 	@rm -rf ./build/*
 
 #	Build kernel
-	$(AS) $(ASFLAGS) src/Crystal/asm/io.S -o io.o
+	$(AS) $(ASFLAGS) src/Crystal/asm/io.S -o io.S.o
+	$(AS) $(ASFLAGS) src/Crystal/asm/gdt.S -o gdt.S.o
 	$(C3) $(C3FLAGS)
 	@printf "\n";
 
@@ -26,7 +27,7 @@ all:
 #	Build ISO
 	@rm -rf iso_root
 	@mkdir -p iso_root
-	@cp $(ELF_IMAGE) resources/limine.cfg resources/bg.bmp resources/limine/build/bin/* iso_root/
+	@cp $(ELF_IMAGE) resources/limine.cfg resources/limine/build/bin/* iso_root/
 	@xorriso -as mkisofs -b limine-cd.bin \
 		-no-emul-boot -boot-load-size 4 -boot-info-table \
 		--efi-boot limine-eltorito-efi.bin \
