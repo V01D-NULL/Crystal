@@ -3,8 +3,8 @@ C3 = c3c
 LD = ld.lld
 
 ASFLAGS = -felf64 -g -F dwarf
-C3FLAGS = build -O2 --threads `nproc` -g --fast -fpic
-LDFLAGS = -nostdlib -zmax-page-size=0x1000 -pie --no-dynamic-linker -static -ztext
+C3FLAGS = build -O2 --threads `nproc` -g --fast
+LDFLAGS = -nostdlib -zmax-page-size=0x1000 -static
 
 ISO_IMAGE = crystal.iso
 ELF_IMAGE = build/crystal.elf
@@ -18,6 +18,9 @@ all:
 #	Build kernel
 	$(AS) $(ASFLAGS) src/Crystal/asm/io.S -o io.S.o
 	$(AS) $(ASFLAGS) src/Crystal/asm/gdt.S -o gdt.S.o
+	$(AS) $(ASFLAGS) src/Crystal/asm/idt.S -o idt.S.o
+	$(AS) $(ASFLAGS) src/Crystal/asm/segments.S -o segments.S.o
+
 	$(C3) $(C3FLAGS)
 	@printf "\n";
 
