@@ -2,6 +2,10 @@ module gdt;
 
 import string;
 import console;
+import assembly;
+import util;
+
+const char GDT_ENTRY_SIZE = 8;
 
 struct Gdtr @packed {
     ushort size;
@@ -21,63 +25,52 @@ struct GdtDescriptor @packed {
     char   base2;
 }
 
-extern fn void load_gdt(ulong *gdtr);
+enum SegmentSel : ushort {
+    NULL,
+    KCS, /* 64 bit kernel cs */
+    KDS, /* 64 bit kernel ds */
+    UCS, /* 64 bit user   cs */
+    UDS  /* 64 bit user   ds */
+}
 
 Gdtr gdtr;
-// GdtDescriptor[6] descriptors; // Bug :(
+GdtDescriptor[6] descriptors; // 5 gdt entries + 1 tss
 
 fn void init()
 {
-    // 5 gdt entries + 1 tss
-    GdtDescriptor[6] descriptors;
-
     // Null descriptor
-    descriptors[0].limit = 0;
-    descriptors[0].base0 = 0;
-    descriptors[0].base1 = 0;
-    descriptors[0].types = {0,0};
-    descriptors[0].base2 = 0;
+    set64({0,0}, SegmentSel.NULL);
 
     // Kernel cs
-    descriptors[1].limit = 0;
-    descriptors[1].base0 = 0;
-    descriptors[1].base1 = 0;
-    descriptors[1].types = {0x9A, 0x20};
-    descriptors[1].base2 = 0;
+    set64({0x9A, 0x20}, SegmentSel.KCS);
 
     // kernel ds
-    descriptors[2].limit = 0;
-    descriptors[2].base0 = 0;
-    descriptors[2].base1 = 0;
-    descriptors[2].types = {0x92, 0x20};
-    descriptors[2].base2 = 0;
+    set64({0x92, 0x20}, SegmentSel.KDS);
 
     // user cs
-    descriptors[3].limit = 0;
-    descriptors[3].base0 = 0;
-    descriptors[3].base1 = 0;
-    descriptors[3].types = {0xFA, 0x20};
-    descriptors[3].base2 = 0;
+    set64({0xFA, 0x20}, SegmentSel.UCS);
 
     // user ds
-    descriptors[4].limit = 0;
-    descriptors[4].base0 = 0;
-    descriptors[4].base1 = 0;
-    descriptors[4].types = {0xF2, 0x00};
-    descriptors[4].base2 = 0;
+    set64({0xF2, 0x00}, SegmentSel.UDS);
 
-    gdtr.size = ($sizeof(GdtDescriptor) * 5) - 1;
+    gdtr.size = ($sizeof(GdtDescriptor) * 6) - 1;
     gdtr.offset = (ulong)((uptr)(&descriptors));
-    load_gdt((uptr*)(&gdtr));
+    assembly::load_gdt((uptr*)(&gdtr));
+
     console::print("Reached target GDT\n");
 }
 
-// Compiler bug :^(
-// fn void set64(TypesAndAttr types_attr, ichar index) @inline
-// {
-//     descriptors[index].limit = 0;
-//     descriptors[index].base0 = 0;
-//     descriptors[index].base1 = 0;
-//     descriptors[index].types = types_attr;
-//     descriptors[index].base2 = 0;
-// }
+// Convert an offset in the gdt array into a segment selector
+fn isize offset2selector(SegmentSel sel)
+{
+    return sel * GDT_ENTRY_SIZE;
+}
+
+fn void set64(TypesAndAttr types_attr, ushort index) @inline
+{
+    descriptors[index].limit = 0;
+    descriptors[index].base0 = 0;
+    descriptors[index].base1 = 0;
+    descriptors[index].types = types_attr;
+    descriptors[index].base2 = 0;
+}
