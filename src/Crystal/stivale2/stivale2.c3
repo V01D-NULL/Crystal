@@ -31,7 +31,7 @@ char[8192] stack @align(16);
 
 Stivale2_header stivale2_hdr @section(".stivale2hdr") = {
     .entry_point = 0,
-    .stack = (uptr)(&stack[0] + $sizeof(stack)),
+    .stack = (uptr)(&stack + $sizeof(stack)),
     .flags = 0b11110,
     .tags = (ulong)(&framebuffer_hdr)
 };
