@@ -1,10 +1,7 @@
 module idt;
 import bitwise;
-
-struct Idtr @packed {
-    ushort size;
-    ulong  offset;
-}
+import console;
+import assembly;
 
 struct IdtDescriptor @packed {
     ushort offset0;
@@ -16,18 +13,14 @@ struct IdtDescriptor @packed {
     uint   reserved;
 }
 
-extern fn void setup_idt();
 extern IdtDescriptor[256] idt_handlers;
-extern fn void isr0();
-
 fn void init()
 {
-    // idt_handlers[0] = set64((ulong)(&isr0), 8, 0, 0x8E);
-    setup_idt();
-    asm("sti");
-    asm("int 0");
+    assembly::setup_idt();
+    console::print("Reached target IDT\n");
 }
 
+/* Called from assembly for the sake of simplicity, readability and maintainability */
 fn void set64(ulong offset, ushort selector, char ist, char types_attr, int vector) @extname("set64")
 {
     idt_handlers[vector] = {
