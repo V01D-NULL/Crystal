@@ -56,7 +56,7 @@ run:
 	qemu-system-x86_64 -cdrom $(ISO_IMAGE) -m 256M -d int -M smm=off
 
 kvm:
-	qemu-system-x86_64 -cdrom $(ISO_IMAGE) -m 256M -enable-kvm -cpu host -debugcon stdio
+	qemu-system-x86_64 -cdrom $(ISO_IMAGE) -m 256M -enable-kvm -cpu host -debugcon stdio -no-shutdown -no-reboot
 
 uefi:
 	qemu-system-x86_64 -cdrom $(ISO_IMAGE) -m 256M -enable-kvm -cpu host -debugcon stdio -bios /usr/share/ovmf/OVMF.fd

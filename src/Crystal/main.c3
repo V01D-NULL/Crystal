@@ -7,6 +7,7 @@ import string;
 import console;
 import util;
 import gdt;
+import idt;
 
 define log = debug::log;
 
@@ -16,6 +17,7 @@ fn void _start(Stivale2_struct *handover) @extname("_start")
     console::init(tag_fb);
 
     gdt::init();
+    idt::init();
 
     for (;;) {
         asm("hlt");
