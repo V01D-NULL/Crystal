@@ -14,10 +14,11 @@ struct IdtDescriptor @packed {
 }
 
 extern IdtDescriptor[256] idt_handlers;
+
 fn void init()
 {
     assembly::setup_idt();
-    console::print("Reached target IDT\n");
+    console::reached_target("IDT");
 }
 
 /* Called from assembly for the sake of simplicity, readability and maintainability */

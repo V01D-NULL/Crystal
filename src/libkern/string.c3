@@ -61,6 +61,8 @@ fn char* itoa(isize num, char* str, int base=10) {
     isize counter = 0;
     isize digit = 0;
 
+    if (num == 0) return "0";
+
     while (num != 0 && counter < buffer_sz) {
         digit = (num % base);
         if (digit > 9) {

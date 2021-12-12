@@ -49,9 +49,14 @@ Stivale2_struct_tag_framebuffer framebuffer_hdr = {
 Stivale2_header_tag_terminal terminal_hdr = {
     .tag = {
         .identifier = STIVALE2_HEADER_TAG_TERMINAL_ID,
-        .next = 0
+        .next = (uptr)(&mtrr_hdr)
     },
     .flags = 0
+};
+
+Stivale2_tag mtrr_hdr = {
+    .identifier = STIVALE2_STRUCT_TAG_FB_MTRR_ID,
+    .next = 0
 };
 
 //

@@ -12,7 +12,7 @@ section .text
 
 global refresh_kernel_segments
 refresh_kernel_segments:
-    push 8 ; CS
+    push 0x28 ; CS
     lea rax, [rel .new_cs]
     push rax
     retfq
@@ -22,7 +22,7 @@ refresh_kernel_segments:
 
 global refresh_user_segments
 refresh_user_segments:
-    push 0x18 ; CS
+    push 0x38 ; CS
     lea rax, [rel .new_cs]
     push rax
     retfq

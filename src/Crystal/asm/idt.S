@@ -55,7 +55,7 @@ isr%1:
 extern set64
 %macro set_entry 2 ; Params: function/label, interrupt vector
     mov rdi, %1
-    mov rsi, 0x08
+    mov rsi, 0x28
     mov rdx, 0x00
     mov rcx, 0x8E
     mov r8, %2
